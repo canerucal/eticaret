@@ -1,23 +1,47 @@
 from django.db import models
 
-class Scrape(models.Model):
-    op_id = models.AutoField(primary_key=True)
-    brand = models.CharField(max_length=50, null=True)
-    model_name = models.CharField(max_length=50)
-    model_no = models.CharField(max_length=50)
-    os = models.CharField(max_length=50)
-    cpu = models.CharField(max_length=50)
-    cpu_type = models.CharField(max_length=50)
-    ram = models.CharField(max_length=50)
-    disk_size = models.CharField(max_length=50)
-    disk_type = models.CharField(max_length=50)
-    point = models.CharField(max_length=50)
-    price = models.CharField(max_length=50)
-    site_name = models.CharField(max_length=50)
-    site_url = models.CharField(max_length=250, null=True)
+class Brand(models.Model):
+    product_id = models.TextField(primary_key=True)
+    brand = models.TextField()
+    model_name = models.TextField()
+    model_no = models.TextField()
+    photo_1 = models.TextField()
+    photo_2 = models.TextField()
+    photo_3 = models.TextField()
+    photo_4 = models.TextField()
+    photo_5 = models.TextField()
 
     class Meta:
-        db_table = 'scrape'
+        db_table = 'brand'
 
     def __str__(self) -> str:
-        return f"{self.op_id} {self.model_name} {self.site_name} {self.price}₺ "
+        return f"{self.product_id} {self.brand} {self.model_name} "
+
+class Hardware(models.Model):
+    product_id = models.TextField(primary_key=True)
+    os = models.TextField()
+    cpu = models.TextField()
+    cpu_gen = models.TextField()
+    ram = models.TextField()
+    ssd_size = models.TextField()
+    hdd_size = models.TextField()
+    screen_size = models.TextField()
+
+    class Meta:
+        db_table = 'hardware'
+
+    def __str__(self) -> str:
+        return f"{self.product_id} {self.os} {self.cpu} {self.ram} "
+
+class SiteInfo(models.Model):
+    product_id = models.TextField(primary_key=True)
+    product_point = models.IntegerField()
+    price = models.IntegerField()
+    website = models.TextField()
+    url = models.TextField()
+
+    class Meta:
+        db_table = 'site_info'
+
+    def __str__(self) -> str:
+        return f"{self.product_id} {self.product_point} {self.price} {self.website} "
