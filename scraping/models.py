@@ -5,11 +5,7 @@ class Brand(models.Model):
     brand = models.TextField()
     model_name = models.TextField()
     model_no = models.TextField()
-    photo1 = models.TextField()
-    photo2 = models.TextField()
-    photo3 = models.TextField()
-    photo4 = models.TextField()
-    photo5 = models.TextField()
+    photo = models.TextField()
 
     class Meta:
         db_table = 'brand'

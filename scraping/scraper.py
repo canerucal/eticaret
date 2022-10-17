@@ -49,7 +49,8 @@ def getTrendyolData():
                     start = item['src'].index('com')+3
                     end = item['src'].index('ty')-2
                     if len(item['src'])>end:
-                        item['src'] = item['src'][0: start:] + item['src'][end + 1::]
+                        photo = item['src'][0: start:] + item['src'][end + 1::]
+                        break
 
             r = r.text
 
@@ -104,29 +105,36 @@ def getTrendyolData():
 
                         if record == tag:
                             print('aynı kayıt olduğu için kaydedilmedi.', tag)
+                            print('-------')
                             price_check = """SELECT price FROM site_info WHERE url = '"""+tag+"""'"""
-                            point_check = """SELECT point FROM site_info WHERE url = '"""+tag+"""'"""
-                            if price != price_check:
+                            point_check = """SELECT product_point FROM site_info WHERE url = '"""+tag+"""'"""
+                            cursor.execute(price_check)
+                            price_record = cursor.fetchall()[0][0]
+                            cursor.execute(point_check)
+                            point_record = cursor.fetchall()[0][0]
+
+                            if price != price_record:
                                 print('fiyat güncelleniyor!')
-                                new_price = price_check
-                                price_update = """UPDATE site_info SET price ='"""+new_price+"""' WHERE url ='"""+tag+"""'"""
+                                new_price = price
+                                price_update = """UPDATE site_info SET price ='"""+new_price+"""' WHERE url = '"""+tag+"""'"""
                                 cursor.execute(price_update)
                                 connection.commit()
-                            if point_check != point:
+                            if point != point_record:
                                 print('puan güncelleniyor')
-                                new_point = point_check
+                                new_point = point
                                 point_update = """UPDATE site_info SET product_point ='"""+new_point+"""' WHERE url ='"""+tag+"""'"""
                                 cursor.execute(point_update)
                                 connection.commit()
                         else:
-                            brand_insert = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand+"""', '"""+model_name+"""', '"""+model_no+"""');"""
+                            brand_insert = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand+"""', '"""+model_name+"""', '"""+model_no+"""', '"""+photo+"""');"""
                             hardware_insert = """INSERT INTO hardware VALUES ('"""+tag+"""', '"""+os+"""', '"""+cpu+"""', '"""+cpu_gen+"""', '"""+ram+"""', '"""+ssd_size+"""', '"""+hdd_size+"""', '"""+screen_size+"""');"""
                             site_insert = """INSERT INTO site_info VALUES ('"""+tag+"""', '"""+point+"""', '"""+price+"""', '"""+website+"""');"""
                             cursor.execute(brand_insert)
                             cursor.execute(hardware_insert)
                             cursor.execute(site_insert)
                             connection.commit()
-                            print(brand, ' pc kaydedildi.')
+                            print(brand, 'pc kaydedildi.')
+                            print('------')
         
 def getn11Data():
     dbConn()
@@ -158,30 +166,95 @@ def getn11Data():
 
 
             dictionary = dict(zip(key_data, value_data))
-            brand = dictionary['Marka']
-            model_name = soup2.find('h1', {'class': 'proName'}).text
-            model_name = " ".join(model_name.split())
-            model_no = dictionary['Model']
-            print(model_no.lower())
-            os = dictionary['İşletim Sistemi']
-            cpu = dictionary['İşlemci']
-            cpu_gen = dictionary['İşlemci Modeli']
-            ram = dictionary['Bellek Kapasitesi']
-            disk_capacity = dictionary['Disk Kapasitesi']
-            screen_size = dictionary['Ekran Boyutu']
-            rating = soup2.find('strong', {'class': 'ratingScore r100'})
-            # if rating is None:
-            #     # print('None')
-            # else:
-            #     rating = rating.text
-            #     # print(rating)
-            price = soup2.find('div', {'class': 'unf-p-summary-price'}).text
-            # print(price)
-    connection.commit()
-    cursor.close()
-    connection.close()
+            brand_n11 = dictionary['Marka']
+            model_name_n11 = soup2.find('h1', {'class': 'proName'})
+            if model_name_n11 is None:
+                model_name_n11 = "Bilgi yok"
+            else:
+                model_name_n11 = model_name_n11.text
+            model_name_n11 = " ".join(model_name_n11.split()).lower()
+            model_no_n11 = dictionary['Model'].lower()
+            os_n11 = dictionary['İşletim Sistemi'].lower()
+            cpu_n11 = dictionary['İşlemci'].lower()
+            cpu_gen_n11 = dictionary['İşlemci Modeli'].lower()
+            ram_n11 = dictionary['Bellek Kapasitesi'].lower()
+            disk_capacity_n11 = dictionary['Disk Kapasitesi'].lower()
+            screen_size_n11 = dictionary['Ekran Boyutu'].lower()
+            point_n11 = soup2.find('strong', {'class': 'ratingScore r100'})
+            if point_n11 is None:
+                point_n11 = "Bilgi yok"
+            else:
+                point_n11 = point_n11.text
+            price_n11 = soup2.find('div', {'class': 'unf-p-summary-price'})
+            if price_n11 is None:
+                price_n11 = "Bilgi yok"
+            else:
+                price_n11 = price_n11.text
+            website_n11 = 'n11'
+
+            if brand_n11 is None:
+                brand_n11 = "Bilgi yok"
+            elif model_name_n11 is None:
+                model_name_n11 = "Bilgi yok"
+            elif model_no_n11 is None:
+                model_no_n11 = "Bilgi yok"
+            elif os_n11 is None:
+                os_n11 = "Bilgi yok"
+            elif cpu_n11 is None:
+                cpu_n11 = "Bilgi yok"
+            elif cpu_gen_n11 is None:
+                cpu_gen_n11 = "Bilgi yok"
+            elif ram_n11 is None:
+                ram_n11 = "Bilgi yok"
+            elif disk_capacity_n11 is None:
+                disk_capacity_n11 = "Bilgi yok"
+            elif screen_size_n11 is None:
+                screen_size_n11 = "Bilgi yok"
+
+            duplicate_check2 = """select url from brand where url='"""+tag+"""'"""
+            cursor.execute(duplicate_check2)
+            try:
+                global record2
+                record2 = cursor.fetchall()[0][0]
+            except:
+                record2 = " "
+
+            if record2 == tag:
+                print('aynı kayıt olduğu için kaydedilmedi.', tag)
+                print('-------')
+                price_check = """SELECT price FROM site_info WHERE url = '"""+tag+"""'"""
+                point_check = """SELECT product_point FROM site_info WHERE url = '"""+tag+"""'"""
+                cursor.execute(price_check)
+                price_record = cursor.fetchall()[0][0]
+                cursor.execute(point_check)
+                point_record = cursor.fetchall()[0][0]
+
+                if price_n11 != price_record:
+                    print('fiyat güncelleniyor!')
+                    new_price = price_n11
+                    price_update = """UPDATE site_info SET price ='"""+new_price+"""' WHERE url = '"""+tag+"""'"""
+                    cursor.execute(price_update)
+                    connection.commit()
+                if point_n11 != point_record:
+                    print('puan güncelleniyor')
+                    new_point = point_n11
+                    point_update = """UPDATE site_info SET product_point ='"""+new_point+"""' WHERE url ='"""+tag+"""'"""
+                    cursor.execute(point_update)
+                    connection.commit()
+            else:
+                brand_insert2 = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand_n11+"""', '"""+model_name_n11+"""', '"""+model_no_n11+"""');"""
+                hardware_insert2 = """INSERT INTO hardware VALUES ('"""+tag+"""', '"""+os_n11+"""', '"""+cpu_n11+"""', '"""+cpu_gen_n11+"""', '"""+ram_n11+"""', '"""+disk_capacity_n11+"""', '"""+screen_size_n11+"""');"""
+                site_insert2 = """INSERT INTO site_info VALUES ('"""+tag+"""', '"""+point_n11+"""', '"""+price_n11+"""', '"""+website_n11+"""');"""
+                cursor.execute(brand_insert2)
+                cursor.execute(hardware_insert2)
+                cursor.execute(site_insert2)
+                connection.commit()
+                print(brand_n11, 'pc kaydedildi.')
+                print('---------')
 
 getTrendyolData()
-print("Kazıma işlemi tamamlandı")
+print('Trendyol kazıma işlemi tamamlandı.')
+getn11Data()
+print('n11 kazıma işlemi tamamlandı.')
 cursor.close()
 connection.close()
