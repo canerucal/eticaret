@@ -1,24 +1,24 @@
 from django.db import models
 
 class Brand(models.Model):
-    product_id = models.TextField(primary_key=True)
+    url = models.TextField(primary_key=True)
     brand = models.TextField()
     model_name = models.TextField()
     model_no = models.TextField()
-    photo_1 = models.TextField()
-    photo_2 = models.TextField()
-    photo_3 = models.TextField()
-    photo_4 = models.TextField()
-    photo_5 = models.TextField()
+    photo1 = models.TextField()
+    photo2 = models.TextField()
+    photo3 = models.TextField()
+    photo4 = models.TextField()
+    photo5 = models.TextField()
 
     class Meta:
         db_table = 'brand'
 
     def __str__(self) -> str:
-        return f"{self.product_id} {self.brand} {self.model_name} "
+        return f"{self.brand.upper()} ---- {self.model_name.upper()} "
 
 class Hardware(models.Model):
-    product_id = models.TextField(primary_key=True)
+    url = models.TextField(primary_key=True)
     os = models.TextField()
     cpu = models.TextField()
     cpu_gen = models.TextField()
@@ -31,17 +31,16 @@ class Hardware(models.Model):
         db_table = 'hardware'
 
     def __str__(self) -> str:
-        return f"{self.product_id} {self.os} {self.cpu} {self.ram} "
+        return f"{self.os.upper()}---{self.cpu.upper()}---{self.cpu_gen.upper()}---{self.ram.upper()} "
 
 class SiteInfo(models.Model):
-    product_id = models.TextField(primary_key=True)
-    product_point = models.IntegerField()
-    price = models.IntegerField()
+    url = models.TextField(primary_key=True)
+    product_point = models.TextField()
+    price = models.TextField()
     website = models.TextField()
-    url = models.TextField()
 
     class Meta:
         db_table = 'site_info'
 
     def __str__(self) -> str:
-        return f"{self.product_id} {self.product_point} {self.price} {self.website} "
+        return f"{self.website.upper()}---{self.product_point}---{self.price}"

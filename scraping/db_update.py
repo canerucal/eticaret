@@ -11,8 +11,10 @@ connection = psycopg2.connect(
 deneme = '3'
 
 cursor = connection.cursor()
-insert_query = """INSERT INTO BRAND VALUES ("""+deneme+""", 'Apple', 'Macbook Air', '54234523', '4fdsafda')"""
+insert_query = """SELECT url FROM brand where url = '/apple/macbook-pro-m1-max-10c-cpu-32c-gpu-64gb-1-tb-ssd-macos-16-qhd-uzay-grisi-p-318500226'"""
 cursor.execute(insert_query)
-connection.commit()
+records = cursor.fetchall()
+print(records)
+
 cursor.close()
 connection.close()

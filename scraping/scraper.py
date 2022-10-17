@@ -18,18 +18,18 @@ def getTrendyolData():
     dbConn()
     main_url = "https://www.trendyol.com/laptop-x-c103108"
     for a in range(1,6):
-        print('Veri kazıma işlemi başladı.')
+        print('Veri kazıma işlemine başlandı.')
         if a == 2:
-            print("Kazıma işinin %20'si tamamlandı")
+            print("Kazıma işleminin %20'si tamamlandı")
             print("(X----)")
         elif a == 3:
-            print("Kazıma işinin %40'ı tamamlandı")
+            print("Kazıma işleminin %40'ı tamamlandı")
             print("(XX---)")
         elif a == 4:
-            print("Kazıma işinin %60'ı tamamlandı")
+            print("Kazıma işleminin %60'ı tamamlandı")
             print("(XXX--)")
         elif a == 5:
-            print("Kazıma işinin %80'i tamamlandı")
+            print("Kazıma işleminin %80'i tamamlandı")
             print("(XXXX-)")
         
         url = main_url+'?pi={}'.format(a)
@@ -66,7 +66,8 @@ def getTrendyolData():
 
             if matches is not None:
                 json_data = json.loads(matches.group(1))
-                global brand, model_name, model_no, price, point, website, os, cpu, cpu_type, ram, ssd_size, hdd_size,screen_size, product_id
+                global brand, model_name, model_no, price, point, website, os, cpu, cpu_gen, ram, ssd_size, hdd_size,screen_size
+                brand, model_name, model_no, price, point, website, os, cpu, cpu_gen, ram, ssd_size, hdd_size,screen_size = "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok", "bilgi yok"
                 brand = (json_data['product']['brand']['name']).lower() #marka adı
                 model_name = (json_data['product']['name'].lower()) #model adı
                 model_no = (json_data['product']['productCode'].lower()) #model no
@@ -80,7 +81,7 @@ def getTrendyolData():
                     elif attr_check == 168:
                         cpu = list(list(i.values())[1].values())[0].lower()
                     elif attr_check == 320:
-                        cpu_type = list(list(i.values())[1].values())[0].lower()
+                        cpu_gen = list(list(i.values())[1].values())[0].lower()
                     elif attr_check == 232:
                         ram = list(list(i.values())[1].values())[0].lower()
                     elif attr_check == 249:
@@ -89,13 +90,43 @@ def getTrendyolData():
                         hdd_size = list(list(i.values())[1].values())[0].lower()
                     elif attr_check == 23:
                         screen_size = list(list(i.values())[1].values())[0].lower()
-                        
-                        product_id = brand+"-"+cpu+"-"+os+"-"+ram+"-"+model_no+"-"+website
-                        print(brand, cpu, os, ram, website)
-                        insert_query = """INSERT INTO brand VALUES ('"""+product_id+"""', '"""+brand+"""', '"""+model_name+"""', '"""+model_no+"""')"""
-                        cursor.execute(insert_query)
-                        connection.commit()
-                        print(brand, ' pc kaydedildi.')
+
+                        duplicate_check = """select url from brand where url='"""+tag+"""'"""
+                        cursor.execute(duplicate_check)
+                        try:
+                            global record
+                            record = cursor.fetchall()[0][0]
+                        except:
+                            record = " "
+
+                        point = str(point)
+                        price = str(price)
+
+                        if record == tag:
+                            print('aynı kayıt olduğu için kaydedilmedi.', tag)
+                            price_check = """SELECT price FROM site_info WHERE url = '"""+tag+"""'"""
+                            point_check = """SELECT point FROM site_info WHERE url = '"""+tag+"""'"""
+                            if price != price_check:
+                                print('fiyat güncelleniyor!')
+                                new_price = price_check
+                                price_update = """UPDATE site_info SET price ='"""+new_price+"""' WHERE url ='"""+tag+"""'"""
+                                cursor.execute(price_update)
+                                connection.commit()
+                            if point_check != point:
+                                print('puan güncelleniyor')
+                                new_point = point_check
+                                point_update = """UPDATE site_info SET product_point ='"""+new_point+"""' WHERE url ='"""+tag+"""'"""
+                                cursor.execute(point_update)
+                                connection.commit()
+                        else:
+                            brand_insert = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand+"""', '"""+model_name+"""', '"""+model_no+"""');"""
+                            hardware_insert = """INSERT INTO hardware VALUES ('"""+tag+"""', '"""+os+"""', '"""+cpu+"""', '"""+cpu_gen+"""', '"""+ram+"""', '"""+ssd_size+"""', '"""+hdd_size+"""', '"""+screen_size+"""');"""
+                            site_insert = """INSERT INTO site_info VALUES ('"""+tag+"""', '"""+point+"""', '"""+price+"""', '"""+website+"""');"""
+                            cursor.execute(brand_insert)
+                            cursor.execute(hardware_insert)
+                            cursor.execute(site_insert)
+                            connection.commit()
+                            print(brand, ' pc kaydedildi.')
         
 def getn11Data():
     dbConn()
@@ -151,5 +182,6 @@ def getn11Data():
     connection.close()
 
 getTrendyolData()
+print("Kazıma işlemi tamamlandı")
 cursor.close()
 connection.close()
