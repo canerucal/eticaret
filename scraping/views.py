@@ -3,4 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    deneme_liste = [1,2,3,4,5]
+    return render(request, 'index.html', {
+        'deneme_liste': deneme_liste
+    })

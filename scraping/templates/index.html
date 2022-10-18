@@ -1,12 +1,102 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ana Sayfa</title>
-</head>
-<body>
-    deneme
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fiyat Karşılaştırma Sitesi | Ana Sayfa</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-sm-2">
+          <a href="/" class="brand">Fiyat Karşılaştır</a>
+        </div>
+        <div class="col-sm-8">
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-3"
+              type="search"
+              placeholder="Ürün adı, modeli veya e-ticaret sitesi"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-dark" type="submit">Ara</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-3">
+      <div class="row text-center sort-wrapper">
+        <div class="col-sm-4 deneme">
+          <a href="#" class="sorting">En Düşük Fiyat</a>
+        </div>
+        <div class="col-sm-4">
+          <a href="#" class="sorting">En Yüksek Fiyat</a>
+        </div>
+        <div class="col-sm-4">
+          <a href="#" class="sorting">Yüksek Puan Düşük Fiyat</a>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-2">
+      <div class="row">
+        <div class="col-sm-2 mt-2">
+          <div class="deneme filter-area">
+            <div class="filter-title">Fiyat</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Marka</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">İşletim Sistemi</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">CPU</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">CPU Nesli</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Ram</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Disk Kapasitesi</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Ekran Boyutu</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Ürün Puanı</div>
+          </div>
+          <div class="deneme filter-area mt-2">
+            <div class="filter-title">Web Sitesi</div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          {% for i in deneme_liste %}
+          <div class="query-card mt-2">{{i}}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
