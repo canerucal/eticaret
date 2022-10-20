@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 #local
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG')
+# SECRET_KEY = config('SECRET_KEY')
+# DEBUG = config('DEBUG')
 
 #heroku
-# SECRET_KEY = os.environ.get('secret')
-# DEBUG = os.environ.get('debug')
+SECRET_KEY = os.environ.get('secret')
+DEBUG = os.environ.get('debug')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://scraping-eticaret.herokuapp.com/']
 
