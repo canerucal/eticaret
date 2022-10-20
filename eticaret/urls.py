@@ -19,5 +19,8 @@ from scraping import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name="index")
+    path('', views.index, name="index"),
+    path('low-price', views.lowPrice, name="lowPrice"),
+    path('high-price', views.highPrice, name="highPrice"),
+    path('high-point-low-price', views.hplp, name="hplp")
 ]

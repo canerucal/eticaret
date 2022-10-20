@@ -1,6 +1,4 @@
 from django.contrib import admin
-from scraping.models import Brand, Hardware, SiteInfo
+from scraping.models import Brand
 
 admin.site.register(Brand)
-admin.site.register(Hardware)
-admin.site.register(SiteInfo)
