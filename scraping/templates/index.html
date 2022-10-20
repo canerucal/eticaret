@@ -28,13 +28,17 @@
   <body>
     <div class="container mt-3">
       <div class="row">
-        <div class="col-sm-2 brand-wrapper">
-          <a href="/" class="brand">Fiyat Karşılaştır</a>
+        <div class="col-sm-2 brand-wrapper text-center">
+          <a href="/" class="brand">
+            <img src="{% static 'img/logo.svg' %}" alt="">
+          </a>
         </div>
         <div class="col-sm-8">
-          <form class="d-flex" role="search">
+          <form class="d-flex" role="search" method="post">
+            {% csrf_token %}
             <input
               class="form-control me-3"
+              name="q"
               type="search"
               placeholder="Ürün adı, modeli veya e-ticaret sitesi"
               aria-label="Search"
@@ -47,8 +51,8 @@
     <div class="container mt-3">
       <div class="row text-center sort-wrapper">
         <div class="col-sm-3">
-            <a href=" " class="sorting active">Çok Satanlar</a>
-          </div>
+          <a href=" " class="sorting active">Çok Satanlar</a>
+        </div>
         <div class="col-sm-3">
           <a href="low-price" class="sorting">En Düşük Fiyat</a>
         </div>
@@ -56,144 +60,128 @@
           <a href="high-price" class="sorting">En Yüksek Fiyat</a>
         </div>
         <div class="col-sm-3">
-          <a href="high-point-low-price" class="sorting">Yüksek Puan Düşük Fiyat</a>
+          <a href="high-point-low-price" class="sorting"
+            >Yüksek Puan Düşük Fiyat</a
+          >
         </div>
       </div>
     </div>
     <div class="container mt-2">
       <div class="row">
-        <div class="col-sm-2 mt-2">
-          <div class="deneme filter-area">
-            <div class="filter-title">Fiyat</div>
-            <input
-              class="form-control form-control-sm price-filter"
-              type="text"
-              placeholder="Minimum Fiyat ₺"
-              aria-label=".form-control-sm example"
-            />
-            <input
-              class="form-control form-control-sm price-filter"
-              type="text"
-              placeholder="Maksimum Fiyat ₺"
-              aria-label=".form-control-sm example"
-            />
-          </div>
-          <!-- İşletim Sistemi, CPU, CPU Nesli, Ram, Disk Kapasitesi, Ekran Boyutu, Ürün Puanı, Web Sitesi -->
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">Marka</div>
-            {% for i in brands %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+        <div class="col-sm-2">
+          <form role="search" method="post">
+            {% csrf_token %}
+            <!-- İşletim Sistemi, CPU, CPU Nesli, Ram, Disk Kapasitesi, Ekran Boyutu, Ürün Puanı, Web Sitesi -->
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">Marka</div>
+              {% for i in brands %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="brand"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">İşletim Sistemi</div>
-            {% for i in os_type %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">İşletim Sistemi</div>
+              {% for i in os_type %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="os"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">CPU</div>
-            {% for i in cpu %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">CPU</div>
+              {% for i in cpu %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="cpu"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">CPU Nesli</div>
-            {% for i in cpu_gen %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">CPU Nesli</div>
+              {% for i in cpu_gen %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="cpu_gen"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">Ram</div>
-            {% for i in ram %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">Ram</div>
+              {% for i in ram %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="ram"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2">
-            <div class="filter-title">Ekran Boyutu</div>
-            {% for i in screen_size %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2">
+              <div class="filter-title">Ekran Boyutu</div>
+              {% for i in screen_size %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="screen_size"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="deneme filter-area mt-2 mb-5">
-            <div class="filter-title">Web Sitesi</div>
-            {% for i in website %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value=""
-                id="{{i}}"
-              />
-              <label class="form-check-label" for="{{i}}">
-                {{i}}
-              </label>
+            <div class="deneme filter-area mt-2 mb-5">
+              <div class="filter-title">Web Sitesi</div>
+              {% for i in website %}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  name="website"
+                  type="checkbox"
+                  value="{{i}}"
+                  id="{{i}}"
+                />
+                <label class="form-check-label" for="{{i}}"> {{i}} </label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
+            <button class="btn btn-outline-dark" type="submit">Ara</button>
+          </form>
         </div>
         <div class="col-sm-8">
-          {% for i in brand_db %}
+          {% for i in search_box %}
           <div class="query-card mt-2">
             <div class="row">
               <div class="col-sm-3">
@@ -220,7 +208,9 @@
                       alt="trendyol-logo"
                     />
                   </a>
-                  <div class="product-point">Ürün Puanı: {{i.product_point}}</div>
+                  <div class="product-point">
+                    Ürün Puanı: {{i.product_point}}
+                  </div>
                   <div class="attr">İşletim Sistemi: {{i.os}}</div>
                   <div class="attr">CPU: {{i.cpu}}</div>
                   <div class="attr">CPU Gen: {{i.cpu_gen}}</div>
@@ -239,7 +229,9 @@
                       alt="n11-logo"
                     />
                   </a>
-                  <div class="product-point">Ürün Puanı: {{i.product_point}}</div>
+                  <div class="product-point">
+                    Ürün Puanı: {{i.product_point}}
+                  </div>
                   <div class="attr">İşletim Sistemi: {{i.os}}</div>
                   <div class="attr">CPU: {{i.cpu}}</div>
                   <div class="attr">CPU Gen: {{i.cpu_gen}}</div>

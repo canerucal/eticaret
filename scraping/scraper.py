@@ -6,7 +6,7 @@ import time
 start_time = time.time()
 
 print('\nBu program Trendyol ve n11 üzerinden veri kazıma işlemi yapmaktadır.\n')
-print('İşlem internet ve işlemci hızına göre değişkenlik göstermekle birlikte yaklaşık olarak 400 saniye sürmektedir. \n')
+print('İşlem internet ve işlemci hızına göre değişkenlik göstermekle birlikte yaklaşık olarak 500 saniye sürmektedir. \n')
 
 def dbConn():
     global connection, cursor
@@ -25,20 +25,14 @@ def getTrendyolData():
     dbConn()
     main_url = "https://www.trendyol.com/laptop-x-c103108"
     print('Trendyol veri kazıma işlemi başladı.')
-    for a in range(1,6):
+    for a in range(1,10):
         print('Veri kazıma işlemi devam ediyor.')
-        if a == 2:
-            print("Kazıma işleminin %12'si tamamlandı")
-            print("(X-------)")
-        elif a == 3:
+        if a == 5:
             print("Kazıma işleminin %25'i tamamlandı")
-            print("(XX------)")
-        elif a == 4:
-            print("Kazıma işleminin %37'si tamamlandı")
-            print("(XXX-----)")
-        elif a == 5:
+            print("(X----)")
+        elif a == 9:
             print("Kazıma işleminin %50'si tamamlandı")
-            print("(XXXX----)")
+            print("(XXx--)")
         
         url = main_url+'?pi={}'.format(a)
         page = requests.get(url) #html request
@@ -146,20 +140,14 @@ def getn11Data():
     dbConn()
     main_url = "https://www.n11.com/bilgisayar/dizustu-bilgisayar"
     print('n11 veri kazıma işlemi başladı.')
-    for a in range(1,6):
+    for a in range(1,10):
         print('Veri kazıma işlemi devam ediyor.')
-        if a == 2:
-            print("Kazıma işleminin %62'si tamamlandı")
-            print("(XXXXX---)")
-        elif a == 3:
-            print("Kazıma işleminin %74'ü tamamlandı")
-            print("(XXXXXX--)")
-        elif a == 4:
-            print("Kazıma işleminin %86'sı tamamlandı")
-            print("(XXXXXXX-)")
-        elif a == 5:
-            print("Kazıma işlemi %98'i tamamlandı")
-            print("(XXXXXXXX)")
+        if a == 5:
+            print("Kazıma işleminin %60'ı tamamlandı")
+            print("(XXXx-)")
+        elif a == 9:
+            print("Kazıma işleminin %75'i tamamlandı")
+            print("(XXXXX)")
         url = main_url+'?pg={}'.format(a)
         page = requests.get(url) #html request
         soup = BeautifulSoup(page.content, "html.parser") #sayfa içeriğinin parse edilmesi
@@ -195,6 +183,9 @@ def getn11Data():
                     model_name_n11 = "Bilgi yok"
                 else:
                     model_name_n11 = model_name_n11.text
+                photo_n11 = soup2.find('div', {'class': 'imgObj'}).find('a')['href']
+                if photo_n11 is None:
+                    photo_n11 = "Bilgi yok"
                 model_name_n11 = " ".join(model_name_n11.split()).upper()
                 model_no_n11 = dictionary['Model'][1:].upper()
                 os_n11 = dictionary['İşletim Sistemi'][1:].upper()
@@ -273,7 +264,7 @@ def getn11Data():
                         cursor.execute(point_update)
                         connection.commit()
                 else:
-                    brand_insert2 = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand_n11+"""', '"""+model_name_n11+"""', '"""+model_no_n11+"""', 'null', '"""+point_n11+"""', '"""+price_n11+"""', '"""+website_n11+"""', '"""+os_n11+"""', '"""+cpu_n11+"""', '"""+cpu_gen_n11+"""', '"""+ram_n11+"""', '"""+disk_capacity_n11+"""', '"""+screen_size_n11+"""');"""
+                    brand_insert2 = """INSERT INTO brand VALUES ('"""+tag+"""', '"""+brand_n11+"""', '"""+model_name_n11+"""', '"""+model_no_n11+"""', '"""+photo_n11+"""', '"""+point_n11+"""', '"""+price_n11+"""', '"""+website_n11+"""', '"""+os_n11+"""', '"""+cpu_n11+"""', '"""+cpu_gen_n11+"""', '"""+ram_n11+"""', '"""+disk_capacity_n11+"""', '"""+screen_size_n11+"""');"""
                     type_change2 = """ALTER TABLE brand ALTER COLUMN price type float USING PRICE::FLOAT;"""
                     cursor.execute(brand_insert2)
                     cursor.execute(type_change2)
@@ -281,8 +272,8 @@ def getn11Data():
                     print(brand_n11, model_no_n11, 'pc kaydedildi.')
                     print('---------')
 
-# getTrendyolData()
-# print('Trendyol kazıma işlemi tamamlandı.')
+getTrendyolData()
+print('Trendyol kazıma işlemi tamamlandı.')
 getn11Data()
 print('n11 kazıma işlemi tamamlandı.')
 

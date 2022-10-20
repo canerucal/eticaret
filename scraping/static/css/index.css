@@ -8,22 +8,17 @@ body {
   margin-right: 15% !important;
 }
 
-.brand {
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 1.5em;
-  background-color: #000000;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.brand:hover {
-  color: #ffffff;
-}
-
 .sorting {
   text-decoration: none !important;
   color: #000000 !important;
+}
+
+.attr {
+  font-size: 14px;
+}
+
+.product-point {
+  margin-bottom: 2%;
 }
 
 .active {
